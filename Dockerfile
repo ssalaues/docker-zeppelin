@@ -1,8 +1,9 @@
-FROM gettyimages/spark:2.2.0-hadoop-2.7
+FROM ssalaues/spark:test
 
 # SciPy
 RUN set -ex \
  && buildDeps=' \
+    python3-pip \
     libpython3-dev \
     build-essential \
     pkg-config \
@@ -19,7 +20,7 @@ RUN set -ex \
     pandasql \
     scipy \
  ' \
- && pip3 install $packages \
+ && pip3 install setuptools && pip3 install $packages \
  && rm -rf /root/.cache/pip \
  && apt-get purge -y --auto-remove $buildDeps \
  && apt-get clean \
@@ -36,7 +37,7 @@ RUN set -ex \
  && buildDeps=' \
     git \
     bzip2 \
-    npm \
+    nodejs \
  ' \
  && apt-get update && apt-get install -y --no-install-recommends $buildDeps \
  && curl -sL http://archive.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz \
@@ -61,7 +62,11 @@ RUN set -ex \
  && rm -rf /tmp/*
 
 RUN ln -s /usr/bin/pip3 /usr/bin/pip \
- && ln -s /usr/bin/python3 /usr/bin/python
+ && rm -rf /usr/bin/python && ln -s /usr/bin/python3 /usr/bin/python
+
+# Add s3 endpoint and accessKey/secretKey info
+#ADD core-site.xml.template $HADOOP_HOME/etc/hadoop/core-site.xml
+RUN $SPARK_HOME/bin/spark-shell --packages org.apache.hadoop:hadoop-aws:2.7.2
 
 ADD about.json $ZEPPELIN_NOTEBOOK_DIR/2BTRWA9EV/note.json
 WORKDIR $ZEPPELIN_HOME
