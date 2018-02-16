@@ -28,6 +28,7 @@ RUN set -ex \
   -pl 'zeppelin-interpreter,zeppelin-zengine,zeppelin-display,spark-dependencies,spark,markdown,angular,shell,hbase,postgresql,jdbc,python,elasticsearch,zeppelin-web,zeppelin-server,zeppelin-distribution' \
  && tar xvf /usr/src/zeppelin/zeppelin-distribution/target/zeppelin*.tar.gz -C /usr/ \
  && mv /usr/zeppelin* $ZEPPELIN_HOME \
+ && mkdir -p $ZEPPELIN_NOTEBOOK_DIR \
  && mkdir -p $ZEPPELIN_HOME/logs \
  && mkdir -p $ZEPPELIN_HOME/run \
  && apt-get purge -y --auto-remove $buildDeps \
@@ -45,6 +46,5 @@ RUN ln -s /usr/bin/pip3 /usr/bin/pip \
 ADD core-site.xml.template $HADOOP_HOME/etc/hadoop/core-site.xml
 RUN $SPARK_HOME/bin/spark-shell --packages org.apache.hadoop:hadoop-aws:2.7.2
 
-ADD about.json $ZEPPELIN_NOTEBOOK_DIR/2BTRWA9EV/note.json
 WORKDIR $ZEPPELIN_HOME
 CMD ["bin/zeppelin.sh"]
