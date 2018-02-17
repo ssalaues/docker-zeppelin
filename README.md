@@ -17,55 +17,33 @@ This image is large and opinionated. It contains:
   - hbase
   - elasticsearch
 
-A prior build of `dylanmei/zeppelin:latest` contained Spark 1.6.0, Python 2.7, and **all** of the stock interpreters. That image is still available as `dylanmei/zeppelin:0.6.0-stable`.
-
 ## simple usage
 
-To start Zeppelin pull the `latest` image and run the container:
+To start Zeppelin with no configuration simply run the container:
 
 ```
-docker pull dylanmei/zeppelin
-docker run --rm -p 8080:8080 dylanmei/zeppelin
+docker run --rm -p 8080:8080 ssalaues/zeppelin
 ```
 
-Zeppelin will be running at `http://${YOUR_DOCKER_HOST}:8080`.
+Zeppelin will be running at `http://${YOUR_DOCKER_HOST}:8080`and will clean up the container upon exit 
 
 ## complex usage
 
-You can use [docker-compose](http://docs.docker.com/compose) to easily run Zeppelin in more complex configurations. See this project's `./examples` directory for examples of using Zeppelin with `docker-compose` to :
+### build
 
-- read and write from local data files
-- read and write documents in ElasticSearch
-
-## onbuild
-
-The Docker `onbuild` container is still a part of this project, but **I have no plans to keep it updated**. See the `onbuild` directory to view its `Dockerfile`.
-
-To use it, create a new `Dockerfile` based on `dylanmei/zeppelin:onbuild` and supply a new, executable `install.sh` file in the same directory. It will override the base one via Docker's [ONBUILD](https://docs.docker.com/reference/builder/#onbuild) instruction.
-
-The steps, expressed here as a script, can be as simple as:
-
+If you want to build an image with custom JVM memory constraints use the following command with your custom values.
+You can set the max memory usage along with max persistant usage with the below respective commands.
+(Defaults if not specified, MEM=2gb and MAX_PERM_SIZE=1024m)
 ```
-#!/bin/bash
-cat > ./Dockerfile <<DOCKERFILE
-FROM dylanmei/zeppelin:onbuild
-
-ENV ZEPPELIN_MEM="-Xmx1024m"
-DOCKERFILE
-
-cat > ./install.sh <<INSTALL
-git pull
-mvn clean package -DskipTests \
-  -Pspark-1.5 \
-  -Dspark.version=1.5.2 \
-  -Phadoop-2.2 \
-  -Dhadoop.version=2.0.0-cdh4.2.0 \
-  -Pyarn
-INSTALL
-
-docker build -t my_zeppelin .
+docker build -t ssalaues/zeppelin --build-arg MEM=16g --build-arg MAX_PERM_SIZE=8g .
 ```
 
-## license
+### run
 
-MIT
+The container can be ran with arguments to limit the amount of resources the container has access to.
+(defaults allow for containers to use as much cpu resources as available on the system)
+```
+ docker run --cpus=8 -v "$(pwd)"/notebooks:/usr/zeppelin/notebook -p 8080:8080 ssalaues/zeppelin
+```
+#### NOTE: that the above command also has a bind mount to the containers default notebook directory for data retention
+
