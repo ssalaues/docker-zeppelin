@@ -43,7 +43,7 @@ RUN ln -s /usr/bin/pip3 /usr/bin/pip \
  && rm -rf /usr/bin/python && ln -s /usr/bin/python3 /usr/bin/python
 
 # Add s3 endpoint and accessKey/secretKey info
-ADD core-site.xml.template $HADOOP_HOME/etc/hadoop/core-site.xml
+#ADD core-site.xml.template $HADOOP_HOME/etc/hadoop/core-site.xml
 RUN $SPARK_HOME/bin/spark-shell --packages org.apache.hadoop:hadoop-aws:2.7.2
 
 WORKDIR $ZEPPELIN_HOME
