@@ -37,13 +37,14 @@ You can set the max memory usage along with max persistant usage with the below 
 ```
 docker build -t ssalaues/zeppelin --build-arg MEM=16g --build-arg MAX_PERM_SIZE=8g .
 ```
+#### NOTE: Due to the nature of Spark memory constraints should allow for the entire data set to be stored in memory for optimal performance.
 
 ### run
 
-The container can be ran with arguments to limit the amount of resources the container has access to.
+The container can be ran with arguments to limit the amount of resources the container has access to. This is a tunable resource that should be adjusted based on performance needs.
 (defaults allow for containers to use as much cpu resources as available on the system)
 ```
- docker run --cpus=8 -v "$(pwd)"/notebooks:/usr/zeppelin/notebook -p 8080:8080 ssalaues/zeppelin
+ docker run --cpus=4 -v "$(pwd)"/notebooks:/usr/zeppelin/notebook -p 8080:8080 ssalaues/zeppelin
 ```
-#### NOTE: that the above command also has a bind mount to the containers default notebook directory for data retention
+#### NOTE: that the above command also has a bind mount to the containers default notebook directory for persistant notebook storage
 
