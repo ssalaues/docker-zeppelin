@@ -79,3 +79,5 @@ val b = business.withColumn("category", explode(
 b.registerTempTable("business")
 
 ```
+Suggested reading for advanced JSON processing in Spark:
+http://blog.antlypls.com/blog/2016/01/30/processing-json-data-with-sparksql/
