@@ -46,5 +46,8 @@ RUN ln -s /usr/bin/pip3 /usr/bin/pip \
 #ADD core-site.xml.template $HADOOP_HOME/etc/hadoop/core-site.xml
 RUN $SPARK_HOME/bin/spark-shell --packages org.apache.hadoop:hadoop-aws:2.7.2
 
+# Example Notebook with basic SQL 
+ADD ./examples/notebook $ZEPPELIN_NOTEBOOK_DIR
+
 WORKDIR $ZEPPELIN_HOME
 CMD ["bin/zeppelin.sh"]

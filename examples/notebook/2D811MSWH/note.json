@@ -129,7 +129,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "Demo",
+  "name": "Demo - Spark SQL",
   "id": "2D811MSWH",
   "angularObjects": {
     "2D7YMUPW9:shared_process": [],

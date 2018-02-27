@@ -48,3 +48,34 @@ The container can be ran with arguments to limit the amount of resources the con
 ```
 #### NOTE: that the above command also has a bind mount to the containers default notebook directory for persistant notebook storage
 
+
+## Demo using sql commands on Spark
+There is a pre loaded "Demo" notebook that allows for connection to an S3 compatible endpoint along with accessKey and secretKey values. This basic example uses this [Yelp dataset](https://github.com/shaivikochar/Yelp-Dataset-Analysis/blob/master/zeppelin.md) as an example and has very simple code to load all JSON files in bucket ```foo```, process it and but it into a SQL table for search.
+
+#### NOTE: Spark expects each line to be a separate JSON object. It will fail if you’ll try to load "pretty" formatted JSON files
+
+```
+import scala.collection.mutable.WrappedArray
+import spark.implicits._
+import org.apache.spark.sql.functions._
+
+//Set the endpoint
+sc.hadoopConfiguration.set("fs.s3a.endpoint", "http://endpoint:port");
+// Allows for S3 to be an accessible file system
+sc.hadoopConfiguration.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem");
+// Access key and Secret key values
+sc.hadoopConfiguration.set("fs.s3a.access.key", "accessKey1");
+sc.hadoopConfiguration.set("fs.s3a.secret.key", "verySecretKey1");
+
+// Loads all json files (regex supported)
+val allFiles = sc.textFile("s3a://foo/*.json");
+val business = spark.read.json(allFiles);
+ 
+val b = business.withColumn("category", explode(
+    when(col("categories").isNotNull, col("categories"))
+    .otherwise(array(lit(null).cast("string")))
+    ))
+    
+b.registerTempTable("business")
+
+```
