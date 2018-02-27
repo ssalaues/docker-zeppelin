@@ -50,7 +50,7 @@ The container can be ran with arguments to limit the amount of resources the con
 
 
 ## Demo using sql commands on Spark
-There is a pre loaded "Demo" notebook that allows for connection to an S3 compatible endpoint along with accessKey and secretKey values. This basic example uses this [Yelp dataset](https://github.com/shaivikochar/Yelp-Dataset-Analysis/blob/master/zeppelin.md) as an example and has very simple code to load all JSON files in bucket ```foo```, process it and but it into a SQL table for search.
+There is a pre loaded "Demo" notebook that allows for connection to an S3 compatible endpoint along with accessKey and secretKey values. This basic demo uses this [Yelp dataset](https://github.com/shaivikochar/Yelp-Dataset-Analysis/blob/master/zeppelin.md) as an example and has very simple code to load all JSON files in bucket ```foo```, process it and but it into a SQL table for search.
 
 #### NOTE: Spark expects each line to be a separate JSON object. It will fail if you’ll try to load "pretty" formatted JSON files
 
