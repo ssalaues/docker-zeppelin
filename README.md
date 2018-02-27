@@ -79,5 +79,12 @@ val b = business.withColumn("category", explode(
 b.registerTempTable("business")
 
 ```
+
+To run a SQL query on the data loaded in the example above, a new paragraph in Zeppelin needs to be used. For example the below query will output the data parsed in a visualization.
+
+```
+%sql SELECT  category,city,avg(stars) as avg_stars from business  group by category,city order by category asc, avg_stars desc
+```
+![chart](https://github.com/ssalaues/docker-zeppelin/blob/master/examples/chart.png?raw=true)
 Suggested reading for advanced JSON processing in Spark:
 http://blog.antlypls.com/blog/2016/01/30/processing-json-data-with-sparksql/
